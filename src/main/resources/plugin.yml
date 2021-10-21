@@ -1,0 +1,6 @@
+name: TroggsMMO
+version: '${project.version}'
+main: xyz.troggs.mmo.Main
+api-version: 1.17
+authors: [ Troggs ]
+website: troggs.xyz
