@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 
 public class Ranger {
 
-    enum RangerSubClass {
+    public enum RangerSubClass {
         LOCKED,
         ARCHER,
         MARKSMAN
@@ -32,6 +32,10 @@ public class Ranger {
 
     public int getLevelExp() {
         return levelExp;
+    }
+
+    public RangerSubClass getSubClass() {
+        return subClass;
     }
 
     public Document getDocument() {

@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 
 public class Mage {
 
-    enum MageSubClass {
+    public enum MageSubClass {
         LOCKED,
         NECROMANCER,
         ILLUSIONIST
@@ -32,6 +32,10 @@ public class Mage {
 
     public int getLevelExp() {
         return levelExp;
+    }
+
+    public MageSubClass getSubClass() {
+        return subClass;
     }
 
     public Document getDocument() {

@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 
 public class Warrior {
 
-    enum WarriorSubClass {
+    public enum WarriorSubClass {
         LOCKED,
         ASSASSIN,
         BRAWLER
@@ -32,6 +32,10 @@ public class Warrior {
 
     public int getLevelExp() {
         return levelExp;
+    }
+
+    public WarriorSubClass getSubClass() {
+        return subClass;
     }
 
     public Document getDocument() {

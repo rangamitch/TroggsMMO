@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 
 public class Cleric {
 
-    enum ClericSubClass {
+    public enum ClericSubClass {
         LOCKED,
         MENDER,
         SHAMAN
@@ -32,6 +32,10 @@ public class Cleric {
 
     public int getLevelExp() {
         return levelExp;
+    }
+
+    public ClericSubClass getSubClass() {
+        return subClass;
     }
 
     public Document getDocument() {

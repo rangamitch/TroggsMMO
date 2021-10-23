@@ -64,6 +64,7 @@ public final class Main extends JavaPlugin {
     public void onDisable() {
         if(mongoEnabled) {
             playerDataHandler.savePlayers();
+            mongoHandler.mongoClient.close();
         }
     }
 

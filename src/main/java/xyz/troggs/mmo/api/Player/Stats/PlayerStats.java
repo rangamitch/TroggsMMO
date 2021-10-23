@@ -47,10 +47,10 @@ public class PlayerStats {
         document.put("levelExp", levelExp);
         document.put("active-class", playerClass.toString());
 
-        document.put("classes.cleric", cleric.getDocument());
-        document.put("classes.mage", mage.getDocument());
-        document.put("classes.ranger", ranger.getDocument());
-        document.put("classes.warrior", warrior.getDocument());
+        document.put("classes", new Document("cleric", cleric.getDocument())
+                .append("mage", mage.getDocument())
+                .append("ranger", ranger.getDocument())
+                .append("warrior", warrior.getDocument()));
         return document;
     }
 

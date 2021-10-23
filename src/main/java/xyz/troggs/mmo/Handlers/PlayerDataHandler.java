@@ -4,6 +4,7 @@ import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -40,7 +41,7 @@ public class PlayerDataHandler implements Listener {
         MongoCollection<Document> collection = database.getCollection("playerData");
 
         for(String uuid : playerMap.keySet()){
-            collection.updateOne(Filters.eq("uuid", uuid), playerMap.get(uuid).getDocument());
+            collection.replaceOne(Filters.eq("uuid", uuid), playerMap.get(uuid).getDocument());
         }
     }
 
@@ -80,7 +81,6 @@ public class PlayerDataHandler implements Listener {
             playerDoc = collection.find(Filters.eq("uuid", uuid)).first();
         }
         main.playerDataHandler.playerMap.put(uuid, new PlayerData(playerDoc));
-        Bukkit.broadcastMessage(playerMap.get(uuid).getStats().getPlayerClass().toString());
     }
 
     @EventHandler
