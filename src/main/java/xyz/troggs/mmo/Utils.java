@@ -1,5 +1,6 @@
 package xyz.troggs.mmo;
 
+import org.bukkit.ChatColor;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,6 +9,11 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 public class Utils {
+
+    public String chat(String message){
+        return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
     private String readAll(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
         int cp;
