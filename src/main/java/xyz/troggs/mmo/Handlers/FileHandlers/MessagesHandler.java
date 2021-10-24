@@ -1,4 +1,4 @@
-package xyz.troggs.mmo.Handlers;
+package xyz.troggs.mmo.Handlers.FileHandlers;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

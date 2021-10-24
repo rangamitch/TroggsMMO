@@ -4,10 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.troggs.mmo.Commands.TMMOCommand.TMMOCommand;
 import xyz.troggs.mmo.Commands.TMMOCommand.TMMOTabComplete;
-import xyz.troggs.mmo.Handlers.ConfigHandler;
-import xyz.troggs.mmo.Handlers.MessagesHandler;
-import xyz.troggs.mmo.Handlers.MongoHandler;
-import xyz.troggs.mmo.Handlers.PlayerDataHandler;
+import xyz.troggs.mmo.Handlers.DataHandlers.MongoHandler;
+import xyz.troggs.mmo.Handlers.DataHandlers.PlayerDataHandler;
+import xyz.troggs.mmo.Handlers.DataHandlers.RedisHandler;
+import xyz.troggs.mmo.Handlers.FileHandlers.ConfigHandler;
+import xyz.troggs.mmo.Handlers.FileHandlers.MessagesHandler;
+import xyz.troggs.mmo.Handlers.ItemHandler;
 
 import java.io.IOException;
 
@@ -16,10 +18,14 @@ public final class Main extends JavaPlugin {
     public MongoHandler mongoHandler;
     private boolean mongoEnabled;
 
+    public RedisHandler redisHandler;
+
     public ConfigHandler configHandler;
     public MessagesHandler messagesHandler;
 
     public PlayerDataHandler playerDataHandler;
+
+    public ItemHandler itemHandler;
 
     @Override
     public void onEnable() {
@@ -55,6 +61,8 @@ public final class Main extends JavaPlugin {
 
         messagesHandler = new MessagesHandler();
         messagesHandler.base(this);
+
+        itemHandler = new ItemHandler(this);
 
         registerCommands();
         registerEvents();

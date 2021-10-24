@@ -1,4 +1,4 @@
-package xyz.troggs.mmo.Handlers;
+package xyz.troggs.mmo.Handlers.DataHandlers;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;

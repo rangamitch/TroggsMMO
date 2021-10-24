@@ -34,4 +34,12 @@ public class Utils {
             is.close();
         }
     }
+
+    public String invisibleText(String message){
+        StringBuilder hidden = new StringBuilder();
+        for(char c : message.toCharArray()){
+            hidden.append(ChatColor.COLOR_CHAR + "").append(c);
+        }
+        return hidden.toString().replace("§", "");
+    }
 }
