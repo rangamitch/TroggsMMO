@@ -15,7 +15,7 @@
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <url>troggs.xyz</url>
+    <url>mmo.troggs.xyz</url>
 
     <build>
         <plugins>
@@ -63,7 +63,6 @@
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
     </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
