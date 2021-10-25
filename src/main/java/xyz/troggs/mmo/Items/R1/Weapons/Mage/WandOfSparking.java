@@ -27,7 +27,7 @@ public class WandOfSparking {
         meta.getPersistentDataContainer().set(new NamespacedKey(main, "position"), PersistentDataType.STRING, "mainHand");
         meta = ItemEnchant.mageWeaponEnchants(main, meta);
         item.setItemMeta(meta);
-        map.put("wandOfSparking", new Item(main, "wandOfSparking", ItemRarity.COMMON, 1, "MAGE", item));
+        map.put("wandOfSparking", new Item(main, "wandOfSparking", ItemRarity.RARE, 1, "MAGE", item));
         return map;
     }
 

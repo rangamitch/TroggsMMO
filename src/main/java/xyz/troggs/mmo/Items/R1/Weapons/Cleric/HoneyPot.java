@@ -1,9 +1,6 @@
 package xyz.troggs.mmo.Items.R1.Weapons.Cleric;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -26,25 +23,28 @@ import java.util.Map;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-public class ElderBerries {
-
+public class HoneyPot {
     public Map<String, Item> item(Main main){
         Map<String, Item> map = new HashMap<>();
         Utils utils = new Utils();
-        ItemStack item = new ItemStack(Material.SWEET_BERRIES);
+        ItemStack item = new ItemStack(Material.HONEY_BOTTLE);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(utils.chat("Elderberries"));
-        meta.setLore(Arrays.asList(utils.chat("&6Item Ability: Feed Others &e&lLEFT CLICK"), utils.chat("&7Left click another player to heal"), utils.chat("&7them for &a3 &7base health"), utils.chat("&f"), utils.chat("&6Item Ability: Feed Self &e&lRIGHT CLICK"), utils.chat("&7Right click to heal yourself"), utils.chat("&7for &a3 &7base health"), utils.chat("&8Cooldown: &a15s")));
-        meta.getPersistentDataContainer().set(new NamespacedKey(main, "position"), PersistentDataType.STRING, "mainHand");
+        meta.setDisplayName(utils.chat("Honey Pot"));
+        meta.setLore(Arrays.asList(utils.chat("&6Item Ability: Feed Others &e&lSNEAK CLICK"), utils.chat("&7Sneak to release a pool of honey which"), utils.chat("&7will heal players &a1 &7base health per second for 3 seconds."), utils.chat("&8Cooldown: &a30s")));
+        meta.getPersistentDataContainer().set(new NamespacedKey(main, "position"), PersistentDataType.STRING, "offHand");
         meta = ItemEnchant.clericWeaponEnchants(main, meta);
         item.setItemMeta(meta);
-        map.put("elderberries", new Item(main, "elderberries", ItemRarity.COMMON, 1, "CLERIC", item));
+        map.put("honeyPot", new Item(main, "honeyPot", ItemRarity.RARE, 3, "CLERIC", item));
         return map;
     }
 
     public void ability(PlayerInteractEvent event, Main main, ItemStack item){
-        String cooldownKey = "elderberries_" + event.getPlayer().getUniqueId().toString();
+        if(!event.getPlayer().isSneaking()){
+            return;
+        }
+        String cooldownKey = "honeyPot_" + event.getPlayer().getUniqueId().toString();
         if(main.itemHandler.itemCooldowns.contains(cooldownKey)){
+            Bukkit.broadcastMessage("COOLDOWN");
             return;
         }
         Player player = event.getPlayer();
@@ -55,12 +55,17 @@ public class ElderBerries {
             public void run() {
                 main.itemHandler.itemCooldowns.remove(cooldownKey);
             }
-        }.runTaskLaterAsynchronously(main, (long) ((300 / (1+cooldownReduction))));
+        }.runTaskLaterAsynchronously(main, (long) ((600 / (1+cooldownReduction))));
         Location loc;
         loc = player.getLocation();
         new BukkitRunnable() {
+            Long stopTime = System.currentTimeMillis() + 3000;
             public void run() {
                 if(!main.itemHandler.itemCooldowns.contains(cooldownKey)){
+                    this.cancel();
+                    return;
+                }
+                if(System.currentTimeMillis() >= stopTime){
                     this.cancel();
                     return;
                 }
@@ -70,7 +75,7 @@ public class ElderBerries {
                     public void run() {
                         phi += Math.PI / 20;
                         for (double theta = 0; theta <= 2 * Math.PI; theta += Math.PI/30) {
-                            double r = 6;
+                            double r = 1.5;
                             double x = r * cos(theta) * sin(phi);
                             double y = 0.05;
                             double z = r * sin(theta) * sin(phi);

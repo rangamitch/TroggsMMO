@@ -10,6 +10,7 @@ import xyz.troggs.mmo.Handlers.DataHandlers.RedisHandler;
 import xyz.troggs.mmo.Handlers.FileHandlers.ConfigHandler;
 import xyz.troggs.mmo.Handlers.FileHandlers.MessagesHandler;
 import xyz.troggs.mmo.Handlers.ItemHandler;
+import xyz.troggs.mmo.Items.ItemUpdater;
 
 import java.io.IOException;
 
@@ -63,6 +64,7 @@ public final class Main extends JavaPlugin {
         messagesHandler.base(this);
 
         itemHandler = new ItemHandler(this);
+        itemHandler.registerItem();
 
         registerCommands();
         registerEvents();
@@ -78,11 +80,11 @@ public final class Main extends JavaPlugin {
 
     public void registerCommands(){
         getCommand("tmmo").setExecutor(new TMMOCommand(this));
-        getCommand("tmmo").setTabCompleter(new TMMOTabComplete());
+        getCommand("tmmo").setTabCompleter(new TMMOTabComplete(this));
     }
 
     public void registerEvents(){
-
+        new ItemUpdater(this);
     }
 
     private boolean checkToken() {

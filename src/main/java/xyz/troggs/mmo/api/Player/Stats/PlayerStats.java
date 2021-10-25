@@ -10,14 +10,6 @@ import xyz.troggs.mmo.api.Player.Stats.Classes.Warrior;
 
 public class PlayerStats {
 
-    public enum PlayerClass{
-        NULL,
-        MELEE,
-        MAGE,
-        HEALER,
-        ARCHER
-    }
-
     private Document document;
 
     private int level;

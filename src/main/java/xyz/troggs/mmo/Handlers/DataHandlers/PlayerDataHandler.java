@@ -41,7 +41,7 @@ public class PlayerDataHandler implements Listener {
         MongoCollection<Document> collection = database.getCollection("playerData");
 
         for(String uuid : playerMap.keySet()){
-            collection.replaceOne(Filters.eq("uuid", uuid), playerMap.get(uuid).getDocument());
+            collection.updateOne(Filters.eq("uuid", uuid), Updates.set("stats", playerMap.get(uuid).getStats().getDocument()));
         }
     }
 

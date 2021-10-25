@@ -29,17 +29,11 @@ public class TMMOCommand implements CommandExecutor {
             sender.sendMessage(new Utils().chat(main.messagesHandler.config.getString("no-perms")));
             return true;
         }
-        Utils utils = new Utils();
-        ItemStack item = new ItemStack(Material.ARROW);
-        ItemMeta meta = item.getItemMeta();
-        meta.setLore(Arrays.asList(utils.chat("INFO"), utils.chat(""), utils.chat("&9&lRARE")));
-        meta.setDisplayName(utils.chat("&"));
-        NamespacedKey levelReq = new NamespacedKey(main, "levelRequirement");
-        NamespacedKey classReq = new NamespacedKey(main, "classRequirement");
-        meta.getPersistentDataContainer().set(levelReq, PersistentDataType.INTEGER, 10);
-        meta.getPersistentDataContainer().set(classReq, PersistentDataType.STRING, "MAGE");
-        item.setItemMeta(meta);
-        ((Player)sender).getInventory().addItem(item);
+        if(args.length == 3){
+            if(args[1].equalsIgnoreCase("give") && args[0].equalsIgnoreCase("admin")){
+                ((Player) sender).getInventory().addItem(main.itemHandler.itemMap.get(args[2]).getItemStack());
+            }
+        }
         return false;
     }
 }

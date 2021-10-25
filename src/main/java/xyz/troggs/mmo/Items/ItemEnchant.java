@@ -19,7 +19,7 @@ public interface ItemEnchant {
     }
 
     static ItemMeta rangerWeaponEnchants(Main main, ItemMeta meta){
-        meta.getPersistentDataContainer().set(new NamespacedKey(main, "endlessQuiver"), PersistentDataType.INTEGER, 0);
+        meta.getPersistentDataContainer().set(new NamespacedKey(main, "endless-quiver"), PersistentDataType.INTEGER, 0);
         return meta;
     }
 

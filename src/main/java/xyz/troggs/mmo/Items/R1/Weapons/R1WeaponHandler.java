@@ -2,6 +2,7 @@ package xyz.troggs.mmo.Items.R1.Weapons;
 
 import xyz.troggs.mmo.Items.Item;
 import xyz.troggs.mmo.Items.R1.Weapons.Cleric.ElderBerries;
+import xyz.troggs.mmo.Items.R1.Weapons.Cleric.HoneyPot;
 import xyz.troggs.mmo.Items.R1.Weapons.Mage.WandOfSparking;
 import xyz.troggs.mmo.Items.R1.Weapons.Ranger.LongBow;
 import xyz.troggs.mmo.Items.R1.Weapons.Warrior.Broadsword;
@@ -30,6 +31,7 @@ public class R1WeaponHandler {
     public Map<String, Item> getCleric(){
         Map<String, Item> map = new HashMap<String, Item>();
         map.putAll(new ElderBerries().item(main));
+        map.putAll(new HoneyPot().item(main));
 
         return map;
     }
