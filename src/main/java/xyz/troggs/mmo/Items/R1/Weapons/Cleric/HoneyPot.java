@@ -59,7 +59,8 @@ public class HoneyPot {
         Location loc;
         loc = player.getLocation();
         new BukkitRunnable() {
-            Long stopTime = System.currentTimeMillis() + 3000;
+            Long stopTime = System.currentTimeMillis() + 3500;
+            Long healTime = System.currentTimeMillis();
             public void run() {
                 if(!main.itemHandler.itemCooldowns.contains(cooldownKey)){
                     this.cancel();
@@ -68,6 +69,24 @@ public class HoneyPot {
                 if(System.currentTimeMillis() >= stopTime){
                     this.cancel();
                     return;
+                }
+                Location location = player.getLocation();
+                if(System.currentTimeMillis() >= healTime){
+                    healTime += 1000;
+                    for (Entity en : location.getWorld().getNearbyEntities(location, 1.5, 5, 1.5)) {
+                        if (en.getType().equals(EntityType.PLAYER)) {
+                            if (!en.isDead()) {
+                                double amount = 1;
+                                LivingEntity e = ((LivingEntity) en);
+                                double ch = e.getHealth();
+                                if (ch + amount > e.getMaxHealth()) {
+                                    e.setHealth(e.getMaxHealth());
+                                } else {
+                                    e.setHealth(ch + amount);
+                                }
+                            }
+                        }
+                    }
                 }
                 new BukkitRunnable() {
                     double phi = 0;
@@ -81,20 +100,6 @@ public class HoneyPot {
                             double z = r * sin(theta) * sin(phi);
                             loc.add(x, y, z);
                             loc.getWorld().spawnParticle(Particle.WAX_ON, loc, 0, 0, 0, 0, 1);
-                            for (Entity en : loc.getWorld().getNearbyEntities(loc, 0.3, 5, 0.3)) {
-                                if (en.getType().equals(EntityType.PLAYER)) {
-                                    if (!en.isDead()) {
-                                        double amount = 1;
-                                        LivingEntity e = ((LivingEntity) en);
-                                        double ch = e.getHealth();
-                                        if (ch + amount > e.getMaxHealth()) {
-                                            e.setHealth(e.getMaxHealth());
-                                        } else {
-                                            e.setHealth(ch + amount);
-                                        }
-                                    }
-                                }
-                            }
                             loc.subtract(x, y, z);
                         }
                         if(phi > Math.PI){

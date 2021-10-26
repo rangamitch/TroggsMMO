@@ -1,5 +1,8 @@
 package xyz.troggs.mmo.Items.R1.Weapons.Cleric;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -8,11 +11,13 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 import xyz.troggs.mmo.Items.Item;
 import xyz.troggs.mmo.Items.ItemEnchant;
 import xyz.troggs.mmo.Items.ItemRarity;
@@ -38,66 +43,81 @@ public class ElderBerries {
         meta.getPersistentDataContainer().set(new NamespacedKey(main, "position"), PersistentDataType.STRING, "mainHand");
         meta = ItemEnchant.clericWeaponEnchants(main, meta);
         item.setItemMeta(meta);
-        map.put("elderberries", new Item(main, "elderberries", ItemRarity.COMMON, 1, "CLERIC", item));
+        map.put("elderberries", new Item(main, "elderberries", ItemRarity.UNCOMMON, 1, "CLERIC", item));
         return map;
     }
 
     public void ability(PlayerInteractEvent event, Main main, ItemStack item){
+        event.setCancelled(true);
         String cooldownKey = "elderberries_" + event.getPlayer().getUniqueId().toString();
-        if(main.itemHandler.itemCooldowns.contains(cooldownKey)){
-            return;
-        }
         Player player = event.getPlayer();
-        main.itemHandler.itemCooldowns.add(cooldownKey);
-        double cooldownReduction = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(main, "diminish"), PersistentDataType.INTEGER) * 0.05;
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                main.itemHandler.itemCooldowns.remove(cooldownKey);
+        if(event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)){
+            ((LivingEntity) player).setHealth(((LivingEntity) player).getHealth() + 3);
+            if(main.itemHandler.itemCooldowns.contains(cooldownKey)){
+                return;
             }
-        }.runTaskLaterAsynchronously(main, (long) ((300 / (1+cooldownReduction))));
-        Location loc;
-        loc = player.getLocation();
-        new BukkitRunnable() {
-            public void run() {
-                if(!main.itemHandler.itemCooldowns.contains(cooldownKey)){
-                    this.cancel();
-                    return;
+            main.itemHandler.itemCooldowns.add(cooldownKey);
+            double cooldownReduction = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(main, "diminish"), PersistentDataType.INTEGER) * 0.05;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    main.itemHandler.itemCooldowns.remove(cooldownKey);
                 }
-                new BukkitRunnable() {
-                    double phi = 0;
-                    @Override
-                    public void run() {
-                        phi += Math.PI / 20;
-                        for (double theta = 0; theta <= 2 * Math.PI; theta += Math.PI/30) {
-                            double r = 6;
-                            double x = r * cos(theta) * sin(phi);
-                            double y = 0.05;
-                            double z = r * sin(theta) * sin(phi);
-                            loc.add(x, y, z);
-                            loc.getWorld().spawnParticle(Particle.WAX_ON, loc, 0, 0, 0, 0, 1);
-                            for (Entity en : loc.getWorld().getNearbyEntities(loc, 0.3, 5, 0.3)) {
-                                if (en.getType().equals(EntityType.PLAYER)) {
-                                    if (!en.isDead()) {
-                                        double amount = 1;
-                                        LivingEntity e = ((LivingEntity) en);
-                                        double ch = e.getHealth();
-                                        if (ch + amount > e.getMaxHealth()) {
-                                            e.setHealth(e.getMaxHealth());
-                                        } else {
-                                            e.setHealth(ch + amount);
-                                        }
-                                    }
-                                }
-                            }
-                            loc.subtract(x, y, z);
-                        }
-                        if(phi > Math.PI){
-                            this.cancel();
-                        }
-                    }
-                }.runTaskTimer(main, 0, 0);
+            }.runTaskLaterAsynchronously(main, (long) ((300 / (1+cooldownReduction))));
+        }else{
+            Player target = null;
+            try{
+                target = getTargetPlayer(player);
+            } catch (Exception e) {
             }
-        }.runTaskTimer(main, 0, 10);
+            if(target == null){
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(new Utils().chat("&cNo player found.")));
+                return;
+            }
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(new Utils().chat("&aHealing &2" + target.getName() + "&a.")));
+            ((LivingEntity) target).setHealth(((LivingEntity) target).getHealth() + 3);
+            if(main.itemHandler.itemCooldowns.contains(cooldownKey)){
+                return;
+            }
+            main.itemHandler.itemCooldowns.add(cooldownKey);
+            double cooldownReduction = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(main, "diminish"), PersistentDataType.INTEGER) * 0.05;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    main.itemHandler.itemCooldowns.remove(cooldownKey);
+                }
+            }.runTaskLaterAsynchronously(main, (long) ((300 / (1+cooldownReduction))));
+        }
+    }
+
+    public static Player getTargetPlayer(final Player player) {
+        return getTarget(player, player.getWorld().getPlayers());
+    }
+
+    public static Entity getTargetEntity(final Entity entity) {
+        return getTarget(entity, entity.getWorld().getEntities());
+    }
+
+    public static <T extends Entity> T getTarget(final Entity entity,
+                                                 final Iterable<T> entities) {
+        if (entity == null)
+            return null;
+        T target = null;
+        final double threshold = 1;
+        for (final T other : entities) {
+            final Vector n = other.getLocation().toVector()
+                    .subtract(entity.getLocation().toVector());
+            if (entity.getLocation().getDirection().normalize().crossProduct(n)
+                    .lengthSquared() < threshold
+                    && n.normalize().dot(
+                    entity.getLocation().getDirection().normalize()) >= 0) {
+                if (target == null
+                        || target.getLocation().distanceSquared(
+                        entity.getLocation()) > other.getLocation()
+                        .distanceSquared(entity.getLocation()))
+                    target = other;
+            }
+        }
+        return target;
     }
 }

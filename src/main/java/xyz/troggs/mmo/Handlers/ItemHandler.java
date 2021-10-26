@@ -68,6 +68,7 @@ public class ItemHandler implements Listener {
     }
 
     public void itemAbility(PlayerInteractEvent event, String itemId, ItemStack item){
+        Bukkit.broadcastMessage(itemId);
         if(itemId.equalsIgnoreCase("elderberries")){
             new ElderBerries().ability(event, main, item);
             return;
