@@ -25,6 +25,9 @@ public class Broadsword {
         meta.setLore(Arrays.asList(utils.chat("&7Deal extra damage while sneaking")));
         meta.getPersistentDataContainer().set(new NamespacedKey(main, "position"), PersistentDataType.STRING, "mainHand");
         meta = ItemEnchant.warriorWeaponEnchants(main, meta);
+        meta.getPersistentDataContainer().set(new NamespacedKey(main, "hone"), PersistentDataType.INTEGER, 5);
+        meta.getPersistentDataContainer().set(new NamespacedKey(main, "rage"), PersistentDataType.INTEGER, 3);
+        meta.getPersistentDataContainer().set(new NamespacedKey(main, "soul-steal"), PersistentDataType.INTEGER, 3);
         item.setItemMeta(meta);
         map.put("broadsword", new Item(main, "broadsword", ItemRarity.COMMON, 1, "WARRIOR", item));
         return map;

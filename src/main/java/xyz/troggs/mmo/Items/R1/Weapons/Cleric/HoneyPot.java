@@ -30,7 +30,7 @@ public class HoneyPot {
         ItemStack item = new ItemStack(Material.HONEY_BOTTLE);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(utils.chat("Honey Pot"));
-        meta.setLore(Arrays.asList(utils.chat("&6Item Ability: Feed Others &e&lSNEAK CLICK"), utils.chat("&7Sneak to release a pool of honey which"), utils.chat("&7will heal players &a1 &7base health per second for 3 seconds."), utils.chat("&8Cooldown: &a30s")));
+        meta.setLore(Arrays.asList(utils.chat("&6Item Ability: Feed Others &e&lSNEAK RIGHT CLICK"), utils.chat("&7Sneak to release a pool of honey which"), utils.chat("&7will heal players &a1 &7base health "), utils.chat("&7per second for 3 seconds."), utils.chat("&8Cooldown: &a30s")));
         meta.getPersistentDataContainer().set(new NamespacedKey(main, "position"), PersistentDataType.STRING, "offHand");
         meta = ItemEnchant.clericWeaponEnchants(main, meta);
         item.setItemMeta(meta);
@@ -44,7 +44,6 @@ public class HoneyPot {
         }
         String cooldownKey = "honeyPot_" + event.getPlayer().getUniqueId().toString();
         if(main.itemHandler.itemCooldowns.contains(cooldownKey)){
-            Bukkit.broadcastMessage("COOLDOWN");
             return;
         }
         Player player = event.getPlayer();

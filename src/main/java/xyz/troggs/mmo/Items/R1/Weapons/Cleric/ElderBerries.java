@@ -43,7 +43,7 @@ public class ElderBerries {
         meta.getPersistentDataContainer().set(new NamespacedKey(main, "position"), PersistentDataType.STRING, "mainHand");
         meta = ItemEnchant.clericWeaponEnchants(main, meta);
         item.setItemMeta(meta);
-        map.put("elderberries", new Item(main, "elderberries", ItemRarity.UNCOMMON, 1, "CLERIC", item));
+        map.put("elderberries", new Item(main, "elderberries", ItemRarity.COMMON, 1, "CLERIC", item));
         return map;
     }
 

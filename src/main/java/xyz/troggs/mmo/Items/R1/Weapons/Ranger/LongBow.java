@@ -25,6 +25,7 @@ public class LongBow {
         meta.setLore(Arrays.asList(utils.chat("&7&a30% &7chance to consume ammo")));
         meta.getPersistentDataContainer().set(new NamespacedKey(main, "position"), PersistentDataType.STRING, "mainHand");
         meta = ItemEnchant.rangerWeaponEnchants(main, meta);
+        meta.getPersistentDataContainer().set(new NamespacedKey(main, "endless-quiver"), PersistentDataType.INTEGER, 5);
         item.setItemMeta(meta);
         map.put("longBow", new Item(main, "longBow", ItemRarity.COMMON, 1, "RANGER", item));
         return map;

@@ -1,5 +1,6 @@
 package xyz.troggs.mmo.Commands.TMMOCommand;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
@@ -10,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.troggs.mmo.Items.ItemUpdater;
 import xyz.troggs.mmo.Main;
 import xyz.troggs.mmo.Utils;
 
@@ -31,7 +33,15 @@ public class TMMOCommand implements CommandExecutor {
         }
         if(args.length == 3){
             if(args[1].equalsIgnoreCase("give") && args[0].equalsIgnoreCase("admin")){
-                ((Player) sender).getInventory().addItem(main.itemHandler.itemMap.get(args[2]).getItemStack());
+                ((Player) sender).getInventory().addItem(ItemUpdater.addEnchants(main.itemHandler.itemMap.get(args[2]).getItemStack(), main));
+            }
+        }else{
+            for(NamespacedKey key : ((Player) sender).getItemInHand().getItemMeta().getPersistentDataContainer().getKeys()){
+                try{
+                    Bukkit.broadcastMessage(key.toString() + " : " + ((Player) sender).getItemInHand().getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING));
+                } catch (Exception e) {
+                    Bukkit.broadcastMessage(key.toString() + " : " + ((Player) sender).getItemInHand().getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.INTEGER));
+                }
             }
         }
         return false;
